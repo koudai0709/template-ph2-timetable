@@ -20,32 +20,26 @@
         @csrf
 
         <p>
-            <label for="day">曜日</label>
-            <select id="day" name="day" required>
-                @foreach ([1 => '月', 2 => '火', 3 => '水', 4 => '木', 5 => '金'] as $value => $label)
-                    <option value="{{ $value }}" @selected(old('day', 1) == $value)>{{ $label }}曜日</option>
+            <label for="course_id">授業を選択</label>
+            <select id="course_id" name="course_id" required>
+                <option value="">選択してください</option>
+
+                @foreach ($courses as $course)
+                    <option value="{{ $course->id }}"
+                        @selected(old('course_id') == $course->id)>
+                        {{ ['月', '火', '水', '木', '金'][$course->day - 1] }}
+                        {{ $course->period }}限
+                        {{ $course->name }}
+                        （{{ $course->teacher }}）
+                    </option>
                 @endforeach
             </select>
         </p>
-        <p>
-            <label for="period">時限</label>
-            <select id="period" name="period" required>
-                @foreach (range(1, 6) as $period)
-                    <option value="{{ $period }}" @selected(old('period', 1) == $period)>{{ $period }}限</option>
-                @endforeach
-            </select>
-        </p>
-        <p>
-            <label for="title">授業名</label>
-            <input id="title" name="title" type="text" value="{{ old('title') }}" maxlength="255" required>
-        </p>
-        <p>
-            <label for="room">教室（任意）</label>
-            <input id="room" name="room" type="text" value="{{ old('room') }}" maxlength="255">
-        </p>
+
         <button type="submit">登録する</button>
     </form>
 
     <p><a href="{{ url('/entries') }}">一覧へ戻る</a></p>
 </body>
 </html>
+
