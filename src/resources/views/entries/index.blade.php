@@ -1,5 +1,10 @@
 
-<h1>自分の時間割</h1>
+<h1>{{ auth()->user()->name }}さんの時間割</h1>
+
+<form method="POST" action="{{ url('/logout') }}">
+    @csrf
+    <button type="submit">ログアウト</button>
+</form>
 
 @if ($entries->isEmpty())
     <p>まだ授業が登録されていません</p>

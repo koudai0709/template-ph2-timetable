@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>授業一覧</h1>
+
     <table>
         <thead>
             <tr>
@@ -15,6 +16,7 @@
                 <th>授業名</th>
                 <th>担当教員</th>
                 <th>教室</th>
+                <th>登録状況</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +27,11 @@
                     <td>{{ $course->name }}</td>
                     <td>{{ $course->teacher }}</td>
                     <td>{{ $course->room }}</td>
+                    <td>
+                        @if ($course->entries->isNotEmpty())
+                            <span>登録済み</span>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
