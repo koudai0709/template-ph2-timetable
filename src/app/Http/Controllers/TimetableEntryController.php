@@ -69,11 +69,11 @@ class TimetableEntryController extends Controller
 }
 
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $entry = TimetableEntry::findOrFail($id);
+        abort_unless($entry->user_id === $request->user()->id, 403);
         $entry->delete();
-
         return redirect('/entries');
     }
 }
