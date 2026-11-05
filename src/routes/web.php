@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TimetableController;
@@ -20,10 +21,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/courses/{course}', [CourseController::class, 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/entries', [UserTimetableEntryController::class, 'index']);
     Route::get('/entries/create', [TimetableEntryController::class, 'create']);
     Route::post('/entries', [UserTimetableEntryController::class, 'store']);
     Route::delete('/entries/{id}', [TimetableEntryController::class, 'destroy']);
     Route::get('/courses', [CourseController::class, 'index']);
+    Route::post('/courses/{course}/reviews', [ReviewController::class, 'store']);
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
 });

@@ -25,7 +25,11 @@
                 <tr>
                     <td>{{ $entry->course->day }}</td>
                     <td>{{ $entry->course->period }}</td>
-                    <td>{{ $entry->course->name }}</td>
+                    <td>
+                        <a href="{{ url('/courses/' . $entry->course->id) }}">
+                            {{ $entry->course->name }}
+                        </a>
+                    </td>
                     <td>{{ $entry->course->teacher }}</td>
                     <td>{{ $entry->course->room }}</td>
                     <td>

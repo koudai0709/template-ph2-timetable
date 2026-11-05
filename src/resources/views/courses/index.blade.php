@@ -7,7 +7,24 @@
 </head>
 <body>
     <h1>授業一覧</h1>
+    <form method="GET" action="{{ url('/courses') }}">
+    <label for="q">授業名・担当教員名</label>
 
+    <input
+        type="search"
+        id="q"
+        name="q"
+        value="{{ $keyword }}"
+        placeholder="キーワードを入力"
+    >
+
+    <button type="submit">検索</button>
+    <a href="{{ url('/courses') }}">検索を解除</a>
+</form>
+
+@if ($courses->isEmpty())
+    <p>該当する授業はありません。</p>
+@endif
     <table>
         <thead>
             <tr>
@@ -24,7 +41,11 @@
                 <tr>
                     <td>{{ ['月', '火', '水', '木', '金'][$course->day - 1] }}</td>
                     <td>{{ $course->period }}</td>
-                    <td>{{ $course->name }}</td>
+                    <td>
+                        <a href="{{ url('/courses/' . $course->id) }}">
+                            {{ $course->name }}
+                        </a>
+                    </td>
                     <td>{{ $course->teacher }}</td>
                     <td>{{ $course->room }}</td>
                     <td>
