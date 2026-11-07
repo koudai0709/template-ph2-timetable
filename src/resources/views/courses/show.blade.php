@@ -12,6 +12,26 @@
     <p>時限：{{ $course->period }}</p>
     <p>教室：{{ $course->room }}</p>
 
+    <h2>タグ</h2>
+
+    @forelse ($course->tags as $tag)
+        <span>{{ $tag->name }}</span>
+    @empty
+        <p>タグはありません。</p>
+    @endforelse
+
+    <h2>受講者情報</h2>
+
+    <p>受講者数：{{ $course->students->count() }}人</p>
+
+    <h3>受講者一覧</h3>
+
+    @forelse ($course->students as $student)
+        <p>{{ $student->name }}</p>
+    @empty
+        <p>受講者はいません。</p>
+    @endforelse
+
     <a href="{{ url('/courses') }}">授業一覧に戻る</a>
     <h2>レビュー一覧</h2>
 

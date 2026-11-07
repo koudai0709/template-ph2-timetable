@@ -17,7 +17,18 @@
         value="{{ $keyword }}"
         placeholder="キーワードを入力"
     >
+    <label for="tag">タグ</label>
 
+    <select name="tag" id="tag">
+        <option value="">すべてのタグ</option>
+
+        @foreach ($tags as $tag)
+            <option value="{{ $tag->id }}"
+                @selected((string) $tagId === (string) $tag->id)>
+                {{ $tag->name }}
+            </option>
+        @endforeach
+    </select>
     <button type="submit">検索</button>
     <a href="{{ url('/courses') }}">検索を解除</a>
 </form>
@@ -33,6 +44,8 @@
                 <th>授業名</th>
                 <th>担当教員</th>
                 <th>教室</th>
+                <th>タグ</th>
+                <th>気になる☆</th>
                 <th>登録状況</th>
             </tr>
         </thead>
@@ -48,6 +61,25 @@
                     </td>
                     <td>{{ $course->teacher }}</td>
                     <td>{{ $course->room }}</td>
+                    <td>
+                        @foreach ($course->tags as $tag)
+                            <a href="{{ url('/courses') . '?' . http_build_query(['q' => $keyword, 'tag' => $tag->id]) }}">
+                                {{ $tag->name }}
+                            </a>
+                        @endforeach
+                    </td>
+
+                    <td>
+                        <form method="POST" action="{{ route('courses.favorite', $course) }}">
+                            @csrf
+
+                            <button type="submit">
+                                {{ $course->favoritedByUsers->isNotEmpty() ? '★' : '☆' }}
+                            </button>
+
+                            <span>{{ $course->favorited_by_users_count }}人</span>
+                        </form>
+                    </td>
                     <td>
                         @if ($course->entries->isNotEmpty())
                             <span>登録済み</span>
