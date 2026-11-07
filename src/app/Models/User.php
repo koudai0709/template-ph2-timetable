@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\TimetableEntry;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,23 @@ class User extends Authenticatable
     public function entries(): HasMany
     {
         return $this->hasMany(TimetableEntry::class);
+    }
+    public function courses(): BelongsToMan
+    {
+    return $this->belongsToMany(
+        Course::class,
+        'timetable_entries',
+        'user_id',
+        'course_id'
+    );
+    }
+    public function favoriteCourses(): BelongsToMany
+    {
+    return $this->belongsToMany(
+        Course::class,
+        'favorite_courses',
+        'user_id',
+        'course_id'
+    );
     }
 }

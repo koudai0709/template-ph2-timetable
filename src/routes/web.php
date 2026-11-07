@@ -7,6 +7,7 @@ use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\TimetableEntryController;
 use App\Http\Controllers\UserTimetableEntryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FavoriteCourseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/entries', [UserTimetableEntryController::class, 'store']);
     Route::delete('/entries/{id}', [TimetableEntryController::class, 'destroy']);
     Route::get('/courses', [CourseController::class, 'index']);
+    Route::post('/courses/{course}/favorite', [FavoriteCourseController::class, 'toggle'])->name('courses.favorite');
     Route::post('/courses/{course}/reviews', [ReviewController::class, 'store']);
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
 });
