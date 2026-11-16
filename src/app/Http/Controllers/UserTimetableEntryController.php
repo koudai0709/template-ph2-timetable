@@ -36,9 +36,13 @@ class UserTimetableEntryController extends Controller
         ]);
 
         $course = Course::findOrFail($validated['course_id']);
-        $exists = $request->user()->entries()->whereHas('course', function ($query) use ($course) {
-            $query->where('day', $course->day)->where('period', $course->period);
-        })->exists();
+        $exists = $request->user()->entries()
+            ->whereIn('status', ['pending', 'approved'])
+            ->whereHas('course', function ($query) use ($course) {
+                $query->where('day', $course->day)
+                    ->where('period', $course->period);
+            })
+            ->exists();
 
         if ($exists) {
             return back()->withErrors([
@@ -46,7 +50,10 @@ class UserTimetableEntryController extends Controller
             ])->withInput();
         }
 
-        $request->user()->entries()->create($validated);
+        $request->user()->entries()->create([
+            'course_id' => $validated['course_id'],
+            'status' => 'pending',
+        ]);
 
         return redirect('/entries');
     }

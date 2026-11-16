@@ -53,7 +53,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(TimetableEntry::class);
     }
-    public function courses(): BelongsToMan
+    public function courses(): BelongsToMany
     {
     return $this->belongsToMany(
         Course::class,

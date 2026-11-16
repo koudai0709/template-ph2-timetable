@@ -8,6 +8,7 @@ use App\Http\Controllers\TimetableEntryController;
 use App\Http\Controllers\UserTimetableEntryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteCourseController;
+use App\Http\Controllers\AdminEntryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,4 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/courses/{course}/favorite', [FavoriteCourseController::class, 'toggle'])->name('courses.favorite');
     Route::post('/courses/{course}/reviews', [ReviewController::class, 'store']);
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
+    Route::middleware('can:decide-enrollments')->group(function () {
+        Route::get('/admin/entries', [AdminEntryController::class, 'index']);
+        Route::post('/admin/entries/{id}/approve', [AdminEntryController::class, 'approve'])->name('admin.entries.approve');
+        Route::post('/admin/entries/{id}/reject', [AdminEntryController::class, 'reject'])->name('admin.entries.reject');
+    });
 });

@@ -1,0 +1,240 @@
+[
+  {
+    "name": "一般学生の管理者一覧GET",
+    "mode": "roles-off",
+    "http": 200,
+    "location": null,
+    "elapsed_ms": 316,
+    "final": {}
+  },
+  {
+    "name": "一般学生の承認POST",
+    "mode": "roles-off",
+    "http": 302,
+    "location": "http://127.0.0.1:8000/admin/entries",
+    "elapsed_ms": 394,
+    "final": {
+      "id": 3,
+      "user_id": 5,
+      "course_id": 1,
+      "status": "approved",
+      "decided_at": "2026-11-16T17:20:02"
+    }
+  },
+  {
+    "name": "一般学生の管理者一覧GET",
+    "mode": "guarded",
+    "http": 403,
+    "location": null,
+    "elapsed_ms": 326,
+    "final": {}
+  },
+  {
+    "name": "一般学生の承認POST",
+    "mode": "guarded",
+    "http": 403,
+    "location": null,
+    "elapsed_ms": 373,
+    "final": {
+      "id": 3,
+      "user_id": 5,
+      "course_id": 1,
+      "status": "pending",
+      "decided_at": null
+    },
+    "error": {
+      "message": "This action is unauthorized."
+    }
+  },
+  {
+    "name": "却下済み申請を承認",
+    "mode": "state-off",
+    "http": 302,
+    "location": "http://127.0.0.1:8000/admin/entries",
+    "elapsed_ms": 316,
+    "final": {
+      "id": 3,
+      "user_id": 5,
+      "course_id": 1,
+      "status": "approved",
+      "decided_at": "2026-11-16T17:20:09"
+    }
+  },
+  {
+    "name": "承認済み申請を学生が取り消し",
+    "mode": "state-off",
+    "http": 302,
+    "location": "http://127.0.0.1:8000/entries",
+    "elapsed_ms": 332,
+    "final": null
+  },
+  {
+    "name": "却下された授業へ再申請",
+    "mode": "state-off",
+    "http": 500,
+    "location": null,
+    "elapsed_ms": 388,
+    "final": {
+      "entry": {
+        "id": 3,
+        "user_id": 5,
+        "course_id": 1,
+        "status": "rejected",
+        "decided_at": "2026-11-16T08:20:13"
+      },
+      "rows": 1
+    },
+    "error": {
+      "message": "Server Error"
+    }
+  },
+  {
+    "name": "却下済み申請を承認",
+    "mode": "guarded",
+    "http": 403,
+    "location": null,
+    "elapsed_ms": 589,
+    "final": {
+      "id": 3,
+      "user_id": 5,
+      "course_id": 1,
+      "status": "rejected",
+      "decided_at": "2026-11-16T08:20:17"
+    },
+    "error": {
+      "message": ""
+    }
+  },
+  {
+    "name": "承認済み申請を学生が取り消し",
+    "mode": "guarded",
+    "http": 403,
+    "location": null,
+    "elapsed_ms": 300,
+    "final": {
+      "id": 1,
+      "user_id": 3,
+      "course_id": 1,
+      "status": "approved",
+      "decided_at": "2026-11-16T08:20:20"
+    },
+    "error": {
+      "message": ""
+    }
+  },
+  {
+    "name": "却下された授業へ再申請",
+    "mode": "guarded",
+    "http": 422,
+    "location": null,
+    "elapsed_ms": 251,
+    "final": {
+      "entry": {
+        "id": 3,
+        "user_id": 5,
+        "course_id": 1,
+        "status": "rejected",
+        "decided_at": "2026-11-16T08:20:22"
+      },
+      "rows": 1
+    },
+    "error": {
+      "message": "この授業はすでに登録されています。",
+      "errors": {
+        "course_id": [
+          "この授業はすでに登録されています。"
+        ]
+      }
+    }
+  },
+  {
+    "name": "同時承認",
+    "mode": "race-unlocked",
+    "http": [
+      302,
+      302
+    ],
+    "elapsed_ms": [
+      3409,
+      3413
+    ],
+    "final": {
+      "approved_count": 4,
+      "entries": [
+        {
+          "id": 3,
+          "user_id": 5,
+          "course_id": 1,
+          "status": "approved",
+          "decided_at": "2026-11-16T17:20:30"
+        },
+        {
+          "id": 4,
+          "user_id": 6,
+          "course_id": 1,
+          "status": "approved",
+          "decided_at": "2026-11-16T17:20:30"
+        }
+      ],
+      "observations": [
+        {
+          "pid": 33,
+          "entry_id": "3",
+          "count": 2,
+          "time": 1794817227.220298
+        },
+        {
+          "pid": 32,
+          "entry_id": "4",
+          "count": 2,
+          "time": 1794817227.231452
+        }
+      ]
+    }
+  },
+  {
+    "name": "同時承認",
+    "mode": "race-locked",
+    "http": [
+      302,
+      422
+    ],
+    "elapsed_ms": [
+      3363,
+      3370
+    ],
+    "final": {
+      "approved_count": 3,
+      "entries": [
+        {
+          "id": 3,
+          "user_id": 5,
+          "course_id": 1,
+          "status": "approved",
+          "decided_at": "2026-11-16T17:20:39"
+        },
+        {
+          "id": 4,
+          "user_id": 6,
+          "course_id": 1,
+          "status": "pending",
+          "decided_at": null
+        }
+      ],
+      "observations": [
+        {
+          "pid": 1,
+          "entry_id": "3",
+          "count": 2,
+          "time": 1794817236.64721
+        },
+        {
+          "pid": 31,
+          "entry_id": "4",
+          "count": 3,
+          "time": 1794817239.665069
+        }
+      ]
+    }
+  }
+]
