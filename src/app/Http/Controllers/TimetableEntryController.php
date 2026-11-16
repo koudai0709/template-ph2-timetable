@@ -9,7 +9,7 @@ use App\Models\Course;
 
 class TimetableEntryController extends Controller
 {
-   
+
     public function index()
     {
         $entries = TimetableEntry::query()
@@ -22,8 +22,6 @@ class TimetableEntryController extends Controller
 
         return view('entries.index', compact('entries'));
     }
-
-
     
     public function create()
     {
@@ -33,8 +31,6 @@ class TimetableEntryController extends Controller
 
         return view('entries.create', compact('courses'));
     }
-
-
     
     public function store(Request $request)
     {
@@ -67,14 +63,17 @@ class TimetableEntryController extends Controller
         TimetableEntry::create($validated);
         return redirect('/entries');
 }
-
-
+    
     public function destroy(Request $request, $id)
     {
-        $entry = TimetableEntry::findOrFail($id);
-        abort_unless($entry->user_id === $request->user()->id, 403);
-        $entry->delete();
+        $deleted = TimetableEntry::whereKey($id)
+            ->where('user_id', $request->user()->id)
+            ->where('status', 'pending')
+            ->delete();
+
+        abort_unless($deleted === 1, 403);
+
         return redirect('/entries');
     }
-}
 
+}

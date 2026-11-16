@@ -22,7 +22,7 @@
 
     <h2>受講者情報</h2>
 
-    <p>受講者数：{{ $course->students->count() }}人</p>
+    <p>受講者数：{{ $course->students->count() }} / {{ $course->capacity }}人</p>
 
     <h3>受講者一覧</h3>
 

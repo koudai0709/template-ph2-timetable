@@ -26,13 +26,14 @@ class Course extends Model
 
     public function students(): BelongsToMany
     {
-    return $this->belongsToMany(
-        User::class,
+        return $this->belongsToMany(
+            User::class,
             'timetable_entries',
             'course_id',
             'user_id'
-        );
+        )->wherePivot('status', 'approved');
     }
+
     public function favoritedByUsers(): BelongsToMany
     {
     return $this->belongsToMany(

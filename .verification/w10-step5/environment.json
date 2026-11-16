@@ -1,0 +1,9 @@
+{
+  "network": "w10-step5-1794817185849-net",
+  "db": "w10-step5-1794817185849-db",
+  "app": "w10-step5-1794817185849-app",
+  "base": "http://127.0.0.1:8000",
+  "postgres": "PostgreSQL 18.6 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit\nread committed",
+  "host_mounts": [],
+  "db_mounts": []
+}

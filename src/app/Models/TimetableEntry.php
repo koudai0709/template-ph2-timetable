@@ -10,6 +10,7 @@ class TimetableEntry extends Model
     protected $fillable = [
         'user_id',
         'course_id',
+        'status',
     ];
 
     public function course(): BelongsTo
@@ -22,4 +23,3 @@ class TimetableEntry extends Model
         return $this->belongsTo(User::class);
     }
 }
-
