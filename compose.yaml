@@ -35,5 +35,10 @@ services:
       # 初回起動時（ボリュームが空のとき）だけ、このフォルダの .sql が順に実行される
       - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
 
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
+
 volumes:
   db-data:

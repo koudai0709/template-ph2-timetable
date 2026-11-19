@@ -18,5 +18,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('decide-enrollments', function (User $user) {
             return $user->is_admin;
         });
+        Gate::define('post-announcements', function (User $user) {
+            return $user->is_admin;
+        });
     }
 }
