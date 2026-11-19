@@ -43,4 +43,8 @@ class Course extends Model
         'user_id'
     );
     }
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(CourseAnnouncement::class);
+    }
 }

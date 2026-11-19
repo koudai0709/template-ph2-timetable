@@ -1,4 +1,4 @@
-<?php
+docker compose exec app php -l app/Models/CourseAnnouncement.php<?php
 
 namespace App\Http\Controllers;
 

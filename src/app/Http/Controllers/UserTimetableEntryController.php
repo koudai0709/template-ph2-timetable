@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\CourseAnnouncement;
 
 class UserTimetableEntryController extends Controller
 {
@@ -18,7 +19,20 @@ class UserTimetableEntryController extends Controller
             ->select('timetable_entries.*')
             ->get();
 
-        return view('entries.index', compact('entries'));
+        $approvedCourseIds = $entries
+    ->where('status', 'approved')
+    ->pluck('course_id');
+
+$now = now();
+
+$announcements = CourseAnnouncement::with('course')
+    ->whereIn('course_id', $approvedCourseIds)
+    ->whereBetween('created_at', [$now->copy()->subDays(7), $now])
+    ->orderByDesc('created_at')
+    ->orderByDesc('id')
+    ->get();
+
+return view('entries.index', compact('entries', 'announcements'));
     }
 
     public function store(Request $request)

@@ -58,6 +58,7 @@ class CourseController extends Controller
         'reviews.user',
         'tags',
         'students',
+        'announcements' => fn ($query) => $query->orderByDesc('created_at')->orderByDesc('id'),
     ]);
 
         return view('courses.show', compact('course'));

@@ -5,6 +5,22 @@
     <button type="submit">ログアウト</button>
 </form>
 
+<section style="max-width: 24rem; margin-left: auto;">
+    <h2>最近のお知らせ</h2>
+
+    @forelse ($announcements as $announcement)
+        <article>
+            <h3>{{ $announcement->title }}</h3>
+            <p>授業名 {{ $announcement->course->name }}</p>
+            <p>担当教員 {{ $announcement->course->teacher }}</p>
+            <p>投稿日時 {{ $announcement->created_at->format('Y/m/d H:i') }}</p>
+            <p style="white-space: pre-wrap;">{{ $announcement->body }}</p>
+        </article>
+    @empty
+        <p>最近のお知らせはありません。</p>
+    @endforelse
+</section>
+
 @if ($entries->isEmpty())
     <p>まだ授業が登録されていません</p>
 @else

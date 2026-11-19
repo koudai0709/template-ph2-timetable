@@ -9,6 +9,7 @@ use App\Http\Controllers\UserTimetableEntryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteCourseController;
 use App\Http\Controllers\AdminEntryController;
+use App\Http\Controllers\CourseAnnouncementController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,5 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/entries', [AdminEntryController::class, 'index']);
         Route::post('/admin/entries/{id}/approve', [AdminEntryController::class, 'approve'])->name('admin.entries.approve');
         Route::post('/admin/entries/{id}/reject', [AdminEntryController::class, 'reject'])->name('admin.entries.reject');
+    Route::post('/courses/{course}/announcements', [CourseAnnouncementController::class, 'store'])
+        ->middleware('can:post-announcements');
     });
 });

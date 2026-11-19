@@ -6,7 +6,47 @@
 </head>
 <body>
     <h1>{{ $course->name }}</h1>
+    @if (session('success'))
+    <p role="status">{{ session('success') }}</p>
+@endif
 
+@can('post-announcements')
+    <section style="max-width: 24rem; margin-left: auto;">
+        <h2>お知らせを投稿する</h2>
+
+        <form method="POST" action="{{ url('/courses/' . $course->id . '/announcements') }}">
+            @csrf
+
+            <label for="announcement-title">タイトル</label>
+            <input id="announcement-title" name="title" value="{{ old('title') }}" maxlength="50" required>
+            @error('title')
+                <p>{{ $message }}</p>
+            @enderror
+
+            <label for="announcement-body" style="display: block;">本文</label>
+            <textarea id="announcement-body" name="body" required>{{ old('body') }}</textarea>
+            @error('body')
+                <p>{{ $message }}</p>
+            @enderror
+
+            <div style="text-align: right;">
+                <button type="submit">投稿する</button>
+            </div>
+        </form>
+    </section>
+@endcan
+
+<h2>授業のお知らせ</h2>
+
+@forelse ($course->announcements as $announcement)
+    <article>
+        <h3>{{ $announcement->title }}</h3>
+        <p>投稿日時 {{ $announcement->created_at->format('Y/m/d H:i') }}</p>
+        <p style="white-space: pre-wrap;">{{ $announcement->body }}</p>
+    </article>
+@empty
+    <p>お知らせはまだありません。</p>
+@endforelse
     <p>担当教員：{{ $course->teacher }}</p>
     <p>曜日：{{ ['月', '火', '水', '木', '金'][$course->day - 1] }}</p>
     <p>時限：{{ $course->period }}</p>
