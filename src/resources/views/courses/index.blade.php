@@ -36,6 +36,29 @@
             </option>
         @endforeach
     </select>
+    <label for="day">曜日</label>
+    <select name="day" id="day">
+        <option value="">すべての曜日</option>
+        @foreach ([1 => '月曜', 2 => '火曜', 3 => '水曜', 4 => '木曜', 5 => '金曜'] as $value => $label)
+            <option value="{{ $value }}" @selected((string) $day === (string) $value)>
+                {{ $label }}
+            </option>
+        @endforeach
+    </select>
+
+    <label for="period">時限</label>
+    <select name="period" id="period">
+        <option value="">すべての時限</option>
+        @for ($value = 1; $value <= 6; $value++)
+            <option value="{{ $value }}" @selected((string) $period === (string) $value)>
+                {{ $value }}限
+            </option>
+        @endfor
+    </select>
+    <label>
+        <input type="checkbox" name="available" value="1" @checked($availableOnly)>
+        空きありのみ
+    </label>
     <button type="submit">検索</button>
     <a href="{{ url('/courses') }}">検索を解除</a>
 </form>
@@ -72,7 +95,10 @@
                     <td>{{ $course->students()->count() }} / {{ $course->capacity }}人</td>
                     <td>
                         @foreach ($course->tags as $tag)
-                            <a href="{{ url('/courses') . '?' . http_build_query(['q' => $keyword, 'tag' => $tag->id]) }}">
+                            <a href="{{ url('/courses') . '?' . http_build_query([
+                                'q' => $keyword, 'tag' => $tag->id, 'day' => $day, 'period' => $period,
+                                'available' => $availableOnly ? 1 : null,
+                            ]) }}">
                                 {{ $tag->name }}
                             </a>
                         @endforeach
@@ -114,6 +140,8 @@
             @endforeach
         </tbody>
     </table>
+
+    {{ $courses->links('pagination::bootstrap-4') }}
 
     <p>
         <a href="{{ url('/entries') }}">自分の時間割へ戻る</a>
