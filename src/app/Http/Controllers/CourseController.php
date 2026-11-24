@@ -15,10 +15,16 @@ class CourseController extends Controller
     $validated = $request->validate([
         'q' => ['nullable', 'string'],
         'tag' => ['nullable', 'integer', 'exists:tags,id'],
+        'day' => ['nullable', 'integer', 'between:1,5'],
+        'period' => ['nullable', 'integer', 'between:1,6'],
+        'available' => ['sometimes', 'boolean'],
     ]);
 
     $keyword = trim($validated['q'] ?? '');
     $tagId = $validated['tag'] ?? null;
+    $day = $validated['day'] ?? null;
+    $period = $validated['period'] ?? null;
+    $availableOnly = (bool) ($validated['available'] ?? false);
 
     $courses = Course::with([
         'tags',
@@ -41,16 +47,27 @@ class CourseController extends Controller
                 $tagQuery->where('tags.id', $tagId);
             });
         })
+        ->when($day !== null, function ($query) use ($day) {
+            $query->where('day', $day);
+        })
+        ->when($period !== null, function ($query) use ($period) {
+            $query->where('period', $period);
+        })
+        ->when($availableOnly, function ($query) {
+            $query->has('students', '<', DB::raw('courses.capacity'));
+        })
         ->orderBy('day')
         ->orderBy('period')
-        ->get();
+        ->orderBy('id')
+        ->paginate(20)
+        ->withQueryString();
 
     $tags = Tag::orderBy('id')->get();
 
     logger()->info('courses SQL count (controller)', [
         'count' => count(DB::getQueryLog()),
     ]);
-    return view('courses.index', compact('courses', 'keyword', 'tags', 'tagId'));
+    return view('courses.index', compact('courses', 'keyword', 'tags', 'tagId', 'day', 'period', 'availableOnly'));
     }
     public function show(Course $course)
     {
