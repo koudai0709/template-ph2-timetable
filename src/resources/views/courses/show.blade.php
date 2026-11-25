@@ -87,6 +87,33 @@
 
     <p>受講者数：{{ $course->students->count() }} / {{ $course->capacity }}人</p>
 
+    @if (\Illuminate\Support\Facades\Route::has('courses.roster.download'))
+        @can('manage-course-grades')
+            <form method="GET" action="{{ route('courses.roster.download', $course) }}">
+                <button type="submit">履修者名簿CSVをダウンロード</button>
+            </form>
+
+            <form method="POST" action="{{ route('courses.grades.import', $course) }}" enctype="multipart/form-data">
+                @csrf
+                <label for="grade_csv">成績CSV（5MB以下）</label>
+                <input type="file" id="grade_csv" name="grade_csv" accept=".csv,text/csv" required>
+                <button type="submit">成績を登録する</button>
+            </form>
+            <p>Excelでは「CSV UTF-8（コンマ区切り）」で保存してください。</p>
+            <p>登録対象外の学生の行はCSVから削除してください。不正な行が1行でもあれば、全件更新しません。</p>
+            @if (session()->has('grade_import_count'))
+                <p role="status">成績を{{ session('grade_import_count') }}件登録しました。</p>
+            @endif
+            @if ($errors->gradeImport->any())
+                <ul role="alert">
+                    @foreach ($errors->gradeImport->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
+        @endcan
+    @endif
+
     <h3>受講者一覧</h3>
 
     @forelse ($course->students as $student)

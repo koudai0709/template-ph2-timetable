@@ -28,5 +28,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('download-course-material', function (User $user, Course $course): bool {
             return $user->is_admin || $course->students()->whereKey($user->getKey())->exists();
         });
+        Gate::define('manage-course-grades', function (User $user): bool {
+            return (bool) $user->is_admin;
+        });
     }
 }

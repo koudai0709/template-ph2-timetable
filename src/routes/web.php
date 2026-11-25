@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteCourseController;
 use App\Http\Controllers\AdminEntryController;
 use App\Http\Controllers\CourseAnnouncementController;
+use App\Http\Controllers\CourseGradeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
     Route::post('/courses/{course}/announcements', [CourseAnnouncementController::class, 'store'])
         ->middleware('can:post-announcements');
+
+    Route::get('/courses/{course}/roster/download',[CourseGradeController::class, 'download'])->name('courses.roster.download');
+    Route::post('/courses/{course}/grades/import', [CourseGradeController::class, 'import'])->name('courses.grades.import');
 
     Route::middleware('can:decide-enrollments')->group(function () {
         Route::get('/admin/entries', [AdminEntryController::class, 'index']);
