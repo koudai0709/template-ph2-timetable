@@ -3,6 +3,7 @@
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseMaterialController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\TimetableEntryController;
 use App\Http\Controllers\UserTimetableEntryController;
@@ -25,6 +26,8 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}', [CourseController::class, 'show']);
+    Route::post('/courses/{course}/material', [CourseMaterialController::class, 'store'])->name('courses.material.store');
+    Route::get('/courses/{course}/material/download', [CourseMaterialController::class, 'download'])->name('courses.material.download');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/entries', [UserTimetableEntryController::class, 'index']);
     Route::get('/entries/create', [TimetableEntryController::class, 'create']);

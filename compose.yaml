@@ -17,6 +17,7 @@ services:
     build: ./docker/php
     volumes:
       - ./src:/var/www/html
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
     depends_on:
       - db
 
