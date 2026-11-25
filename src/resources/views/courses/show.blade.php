@@ -52,6 +52,29 @@
     <p>時限：{{ $course->period }}</p>
     <p>教室：{{ $course->room }}</p>
 
+    @can('download-course-material', $course)
+        <section>
+            <h2>PDF教材</h2>
+            @if ($course->material_path)
+                <a href="{{ route('courses.material.download', $course) }}">PDFをダウンロード</a>
+            @else
+                <p>PDF教材は未登録です。</p>
+            @endif
+
+            @can('upload-course-material')
+                <form method="POST" action="{{ route('courses.material.store', $course) }}" enctype="multipart/form-data">
+                    @csrf
+                    <label for="material">PDF教材（5MB以下）</label>
+                    <input type="file" id="material" name="material" accept=".pdf,application/pdf" required>
+                    @error('material')
+                        <p>{{ $message }}</p>
+                    @enderror
+                    <button type="submit">{{ $course->material_path ? '差し替える' : 'アップロードする' }}</button>
+                </form>
+            @endcan
+        </section>
+    @endcan
+
     <h2>タグ</h2>
 
     @forelse ($course->tags as $tag)
